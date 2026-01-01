@@ -1,6 +1,7 @@
-=====================================================
-Instagram Downloader + Cobalt API
-=====================================================
+
+**Instagram Downloader + Cobalt API**
+----------------
+
 
 Project Overview
 ----------------
@@ -17,6 +18,7 @@ Tech Stack
 
 Project Structure
 -----------------
+
 project/
 ├── app/
 │   ├── Controllers/
@@ -25,11 +27,13 @@ project/
 │       └── CobaltService.php
 ├── config/
 │   └── cobalt.php
-├── public/ (or root)
+├── public/          # or root folder
 │   └── index.php
-├── downloads/ (media download folder)
+├── downloads/       # media download folder
 ├── vendor/
 └── composer.json
+
+
 
 Setup Instructions
 ------------------
