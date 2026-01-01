@@ -20,18 +20,18 @@ Project Structure
 -----------------
 
 project/
-├── app/
-│   ├── Controllers/
-│   │   └── DownloadController.php
-│   └── Services/
-│       └── CobaltService.php
-├── config/
-│   └── cobalt.php
-├── public/          # or root folder
-│   └── index.php
-├── downloads/       # media download folder
-├── vendor/
-└── composer.json
+- app/
+  - Controllers/
+    - DownloadController.php
+  - Services/
+    - CobaltService.php
+- config/
+  - cobalt.php
+- public/
+  - index.php
+- downloads/
+- vendor/
+- composer.json
 
 
 
