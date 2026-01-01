@@ -1,0 +1,20 @@
+{
+    "name": "bymunajat/instagram-downloader",
+    "description": "Instagram downloader project using Cobalt API",
+    "type": "project",
+    "require": {
+        "guzzlehttp/guzzle": "^6.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Munajat Amuri",
+            "email": "bymunajat@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}
