@@ -11,7 +11,7 @@ class CobaltService
     public function __construct()
     {
         // ambil konfigurasi dari file config/cobalt.php
-        $config = include __DIR__ . '/../Config/cobalt.phpc';
+        $config = include __DIR__ . '/../Config/cobalt.php';
 
         $this->client = new Client([
             'base_uri' => $config['api_url'], // base URL Cobalt lokal
