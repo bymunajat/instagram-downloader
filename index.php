@@ -11,10 +11,23 @@
     <header class="bg-white shadow-md">
         <div class="container mx-auto flex flex-col md:flex-row items-center justify-between py-6 px-4">
             <h1 class="text-2xl font-bold text-green-600 mb-2 md:mb-0">Instagram Downloader</h1>
-            <nav class="flex gap-6 text-gray-600 font-medium">
+            
+            <nav class="flex gap-6 items-center text-gray-600 font-medium">
                 <a href="#" class="hover:text-green-600 transition">Home</a>
                 <a href="#" class="hover:text-green-600 transition">How to Use</a>
                 <a href="#" class="hover:text-green-600 transition">About</a>
+
+                <!-- DROPDOWN MENU -->
+                <div class="relative">
+                    <button id="downloadMenuBtn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-500 transition focus:outline-none">
+                        Download ▼
+                    </button>
+                    <div id="downloadDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg overflow-hidden z-50">
+                        <a href="#video" class="block px-4 py-2 hover:bg-green-100 transition">Video</a>
+                        <a href="#carousel" class="block px-4 py-2 hover:bg-green-100 transition">Carousel</a>
+                        <a href="#igtv" class="block px-4 py-2 hover:bg-green-100 transition">IGTV</a>
+                    </div>
+                </div>
             </nav>
         </div>
     </header>
@@ -50,6 +63,7 @@
         const form = document.getElementById('downloadForm');
         const result = document.getElementById('result');
 
+        // Handle form submit
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const url = document.getElementById('instaUrl').value.trim();
@@ -84,6 +98,21 @@
                 }
             } catch (err) {
                 result.innerHTML = `<p class="text-red-500 text-center font-semibold">Error: ${err.message}</p>`;
+            }
+        });
+
+        // Handle dropdown toggle
+        const downloadMenuBtn = document.getElementById('downloadMenuBtn');
+        const downloadDropdown = document.getElementById('downloadDropdown');
+
+        downloadMenuBtn.addEventListener('click', () => {
+            downloadDropdown.classList.toggle('hidden');
+        });
+
+        // Klik di luar dropdown untuk menutup
+        window.addEventListener('click', (e) => {
+            if (!downloadMenuBtn.contains(e.target) && !downloadDropdown.contains(e.target)) {
+                downloadDropdown.classList.add('hidden');
             }
         });
     </script>
