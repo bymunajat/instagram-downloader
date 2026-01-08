@@ -110,6 +110,41 @@ if (isset($data['files']) && is_array($data['files'])) {
 }
 
 /* =====================================================
+   PICKER (CAROUSEL FROM COBALT)
+===================================================== */
+if (isset($data['status']) && $data['status'] === 'picker' && isset($data['picker'])) {
+
+    $media = [];
+
+    foreach ($data['picker'] as $item) {
+
+        if (empty($item['url'])) continue;
+
+        $type = 'file';
+
+        // Cobalt uses: photo | video
+        if ($item['type'] === 'photo') {
+            $type = 'image';
+        } elseif ($item['type'] === 'video') {
+            $type = 'video';
+        }
+
+        $media[] = [
+            'type' => $type,
+            'url'  => $item['url']
+        ];
+    }
+
+    if (!empty($media)) {
+        echo json_encode([
+            'status' => count($media) === 1 ? 'single' : 'multiple',
+            'media'  => $media
+        ]);
+        exit;
+    }
+}
+
+/* =====================================================
    ERROR FALLBACK
 ===================================================== */
 echo json_encode([

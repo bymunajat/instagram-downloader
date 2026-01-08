@@ -35,7 +35,7 @@
 
         <!-- HOME -->
         <section id="page-home" class="page">
-            <p id="subtitle" class="text-gray-600 text-center mb-6">
+            <p class="text-gray-600 text-center mb-6">
                 Paste your Instagram link and download media instantly.
             </p>
 
@@ -45,7 +45,7 @@
                     required
                     class="flex-1 border border-gray-300 rounded-lg px-4 py-2">
 
-                <button type="submit" id="downloadBtn"
+                <button type="submit"
                     class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-500">
                     Download
                 </button>
@@ -58,10 +58,10 @@
         <section id="page-how" class="page hidden">
             <h2 class="text-xl font-bold mb-4">How to Use</h2>
             <ol class="list-decimal list-inside space-y-2 text-gray-600">
-                <li>Copy Instagram post / reel / carousel link</li>
-                <li>Paste link into input</li>
-                <li>Click Download</li>
-                <li>Choose media and download</li>
+                <li>Copy Instagram post, reel, or carousel link</li>
+                <li>Paste the link into the input field</li>
+                <li>Click the Download button</li>
+                <li>Preview media and download what you need</li>
             </ol>
         </section>
 
@@ -72,7 +72,7 @@
                 Simple Instagram Downloader powered by Cobalt API.
             </p>
             <p class="text-sm text-gray-500">
-                Only public content is supported.
+                Only public Instagram content is supported.
             </p>
         </section>
 
@@ -81,20 +81,32 @@
 
 <!-- ================= FOOTER ================= -->
 <footer class="bg-white shadow-inner mt-8">
-    <div id="footerText"
-        class="container mx-auto py-4 text-center text-gray-500">
+    <div class="container mx-auto py-4 text-center text-gray-500">
         © 2026 Instagram Downloader
     </div>
 </footer>
 
 <!-- ================= SCRIPT ================= -->
 <script>
+/* ---------- NAVIGATION ---------- */
+document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', e => {
+        e.preventDefault();
+        const page = link.dataset.page;
+
+        document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+        document.getElementById('page-' + page).classList.remove('hidden');
+    });
+});
+
+/* ---------- DOWNLOAD LOGIC ---------- */
 const form = document.getElementById('downloadForm');
 const result = document.getElementById('result');
 const instaUrl = document.getElementById('instaUrl');
 
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
+
     const url = instaUrl.value.trim();
     if (!url) return;
 
@@ -109,64 +121,53 @@ form.addEventListener('submit', async (e) => {
 
         const data = await res.json();
 
-        /* ========= SINGLE MEDIA ========= */
         if (data.status === 'single') {
             renderSingle(data);
             return;
         }
 
-        /* ========= CAROUSEL / MULTI ========= */
         if (data.status === 'multiple' && Array.isArray(data.media)) {
             renderCarousel(data.media);
             return;
         }
 
-        result.innerHTML = `<p class="text-red-500 text-center font-semibold">Failed to fetch media</p>`;
-
+        result.innerHTML = `<p class="text-red-500 text-center">Failed to fetch media</p>`;
     } catch (err) {
         result.innerHTML = `<p class="text-red-500 text-center">${err.message}</p>`;
     }
 });
 
-/* ================= SINGLE ================= */
+/* ---------- SINGLE ---------- */
 function renderSingle(data) {
-    let preview = '';
+    const proxyUrl = `download.php?action=download&url=${encodeURIComponent(data.url)}`;
 
-    if (data.type === 'video') {
-        preview = `
-            <video controls class="rounded-lg max-w-full">
-                <source src="${data.url}" type="video/mp4">
-            </video>`;
-    } else {
-        preview = `
-            <img src="${data.url}" class="rounded-lg max-w-full" />`;
-    }
+    const preview = data.type === 'video'
+        ? `<video controls class="rounded-lg max-w-full">
+                <source src="${proxyUrl}" type="video/mp4">
+           </video>`
+        : `<img src="${proxyUrl}" class="rounded-lg max-w-full" />`;
 
     result.innerHTML = `
         <div class="bg-gray-50 p-6 rounded-xl shadow-md flex flex-col items-center gap-4">
             ${preview}
-            <a href="download.php?action=download&url=${encodeURIComponent(data.url)}"
-               class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-500 transition">
+            <a href="${proxyUrl}"
+               class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-500">
                Download
             </a>
         </div>
     `;
 }
 
-/* ================= CAROUSEL ================= */
+/* ---------- CAROUSEL ---------- */
 function renderCarousel(media) {
-    let items = media.map((item, index) => {
-        let preview = '';
+    const items = media.map((item, index) => {
+        const proxyUrl = `download.php?action=download&url=${encodeURIComponent(item.url)}`;
 
-        if (item.type === 'video') {
-            preview = `
-                <video controls class="rounded-lg w-full">
-                    <source src="${item.url}" type="video/mp4">
-                </video>`;
-        } else {
-            preview = `
-                <img src="${item.url}" class="rounded-lg w-full" />`;
-        }
+        const preview = item.type === 'video'
+            ? `<video controls class="rounded-lg w-full">
+                    <source src="${proxyUrl}" type="video/mp4">
+               </video>`
+            : `<img src="${proxyUrl}" class="rounded-lg w-full" />`;
 
         return `
             <div class="border rounded-lg p-4 flex flex-col gap-3">
@@ -176,8 +177,8 @@ function renderCarousel(media) {
 
                 ${preview}
 
-                <a href="download.php?action=download&url=${encodeURIComponent(item.url)}"
-                   class="bg-green-600 text-white text-center py-2 rounded hover:bg-green-500 transition">
+                <a href="${proxyUrl}"
+                   class="bg-green-600 text-white text-center py-2 rounded hover:bg-green-500">
                    Download
                 </a>
             </div>
@@ -191,7 +192,6 @@ function renderCarousel(media) {
     `;
 }
 </script>
-
 
 </body>
 </html>
