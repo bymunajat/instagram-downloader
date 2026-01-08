@@ -1,13 +1,16 @@
 <?php
 
-// ===== HANDLE DIRECT DOWNLOAD (GET) =====
+/* =====================================================
+   DIRECT DOWNLOAD (GET)
+===================================================== */
 if (
     isset($_GET['action']) &&
     $_GET['action'] === 'download' &&
     !empty($_GET['url'])
 ) {
     $url = urldecode($_GET['url']);
-    $filename = 'instagram_media_' . time();
+    $ext = pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION);
+    $filename = 'instagram_media_' . time() . '.' . ($ext ?: 'file');
 
     header('Content-Description: File Transfer');
     header('Content-Type: application/octet-stream');
@@ -20,31 +23,34 @@ if (
     exit;
 }
 
-// ===== COBALT API HANDLER (POST) =====
+/* =====================================================
+   COBALT API HANDLER (POST)
+===================================================== */
 header('Content-Type: application/json');
 
 $input = json_decode(file_get_contents('php://input'), true);
 
-if (!isset($input['url'])) {
+if (empty($input['url'])) {
     echo json_encode([
         'status' => 'error',
-        'error' => ['code' => 'missing_url']
+        'error'  => 'missing_url'
     ]);
     exit;
 }
 
-$instaUrl = $input['url'];
 $apiUrl = 'http://localhost:9000';
 
 $ch = curl_init($apiUrl);
 curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_POST => true,
-    CURLOPT_HTTPHEADER => [
+    CURLOPT_POST           => true,
+    CURLOPT_HTTPHEADER     => [
         'Content-Type: application/json',
         'Accept: application/json'
     ],
-    CURLOPT_POSTFIELDS => json_encode(['url' => $instaUrl])
+    CURLOPT_POSTFIELDS     => json_encode([
+        'url' => $input['url']
+    ])
 ]);
 
 $response = curl_exec($ch);
@@ -52,27 +58,61 @@ curl_close($ch);
 
 $data = json_decode($response, true);
 
-// ===== SINGLE VIDEO =====
-if (isset($data['status']) && $data['status'] === 'redirect') {
+/* =====================================================
+   SINGLE MEDIA (VIDEO / IMAGE)
+===================================================== */
+if (isset($data['url'])) {
+
+    $url = $data['url'];
+    $type = 'file';
+
+    if (preg_match('/\.(mp4|webm|mov)/i', $url)) {
+        $type = 'video';
+    } elseif (preg_match('/\.(jpg|jpeg|png|webp)/i', $url)) {
+        $type = 'image';
+    }
+
     echo json_encode([
         'status' => 'single',
-        'type' => 'video',
-        'url' => $data['url']
+        'type'   => $type,
+        'url'    => $url
     ]);
     exit;
 }
 
-// ===== MULTIPLE MEDIA =====
-if (isset($data['media']) && is_array($data['media'])) {
+/* =====================================================
+   MULTIPLE MEDIA (CAROUSEL)
+===================================================== */
+if (isset($data['files']) && is_array($data['files'])) {
+
+    $media = [];
+
+    foreach ($data['files'] as $url) {
+        $type = 'file';
+
+        if (preg_match('/\.(mp4|webm|mov)/i', $url)) {
+            $type = 'video';
+        } elseif (preg_match('/\.(jpg|jpeg|png|webp)/i', $url)) {
+            $type = 'image';
+        }
+
+        $media[] = [
+            'type' => $type,
+            'url'  => $url
+        ];
+    }
+
     echo json_encode([
         'status' => 'multiple',
-        'media' => $data['media']
+        'media'  => $media
     ]);
     exit;
 }
 
-// ===== ERROR =====
+/* =====================================================
+   ERROR FALLBACK
+===================================================== */
 echo json_encode([
     'status' => 'error',
-    'error' => 'Unsupported or invalid Instagram URL'
+    'error'  => 'unsupported_instagram_url'
 ]);

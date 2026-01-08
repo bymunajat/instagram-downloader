@@ -89,111 +89,109 @@
 
 <!-- ================= SCRIPT ================= -->
 <script>
-/* PAGE SWITCH */
-document.querySelectorAll('.nav-link').forEach(link => {
-    link.onclick = e => {
-        e.preventDefault();
-        document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
-        document.getElementById('page-' + link.dataset.page).classList.remove('hidden');
-    };
-});
-
-/* LANGUAGE */
-const i18n = {
-    en: {
-        subtitle: "Paste your Instagram link and download media instantly.",
-        download: "Download",
-        loading: "Loading...",
-        error: "Failed to fetch media"
-    },
-    id: {
-        subtitle: "Tempel link Instagram dan unduh media.",
-        download: "Unduh",
-        loading: "Memuat...",
-        error: "Gagal mengambil media"
-    }
-};
-
-const langSelector = document.getElementById('langSelector');
-function setLang(lang) {
-    subtitle.textContent = i18n[lang].subtitle;
-    downloadBtn.textContent = i18n[lang].download;
-}
-setLang('en');
-langSelector.onchange = e => setLang(e.target.value);
-
-/* DOWNLOAD */
 const form = document.getElementById('downloadForm');
 const result = document.getElementById('result');
+const instaUrl = document.getElementById('instaUrl');
 
-form.onsubmit = async e => {
+form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const url = instaUrl.value.trim();
     if (!url) return;
 
-    result.innerHTML = `<p class="text-center text-gray-500">${i18n[langSelector.value].loading}</p>`;
+    result.innerHTML = `<p class="text-center text-gray-500">Loading...</p>`;
 
-    const res = await fetch('download.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url })
-    });
+    try {
+        const res = await fetch('download.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url })
+        });
 
-    const data = await res.json();
+        const data = await res.json();
 
-    if (data.status === 'single') {
-        renderSingle(data);
-        return;
+        /* ========= SINGLE MEDIA ========= */
+        if (data.status === 'single') {
+            renderSingle(data);
+            return;
+        }
+
+        /* ========= CAROUSEL / MULTI ========= */
+        if (data.status === 'multiple' && Array.isArray(data.media)) {
+            renderCarousel(data.media);
+            return;
+        }
+
+        result.innerHTML = `<p class="text-red-500 text-center font-semibold">Failed to fetch media</p>`;
+
+    } catch (err) {
+        result.innerHTML = `<p class="text-red-500 text-center">${err.message}</p>`;
     }
+});
 
-    if (data.status === 'multiple') {
-        renderMultiple(data.media);
-        return;
-    }
-
-    result.innerHTML = `<p class="text-red-500 text-center">${i18n[langSelector.value].error}</p>`;
-};
-
-/* RENDER SINGLE */
+/* ================= SINGLE ================= */
 function renderSingle(data) {
-    result.innerHTML = `
-        <div class="bg-gray-50 p-6 rounded-xl shadow flex flex-col gap-4 items-center">
-            ${data.type === 'video'
-                ? `<video controls class="rounded-lg max-w-full"><source src="${data.url}"></video>`
-                : `<img src="${data.url}" class="rounded-lg max-w-full">`
-            }
+    let preview = '';
 
+    if (data.type === 'video') {
+        preview = `
+            <video controls class="rounded-lg max-w-full">
+                <source src="${data.url}" type="video/mp4">
+            </video>`;
+    } else {
+        preview = `
+            <img src="${data.url}" class="rounded-lg max-w-full" />`;
+    }
+
+    result.innerHTML = `
+        <div class="bg-gray-50 p-6 rounded-xl shadow-md flex flex-col items-center gap-4">
+            ${preview}
             <a href="download.php?action=download&url=${encodeURIComponent(data.url)}"
-               class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-500">
-               ${i18n[langSelector.value].download}
+               class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-500 transition">
+               Download
             </a>
         </div>
     `;
 }
 
-/* RENDER MULTIPLE */
-function renderMultiple(media) {
-    let html = `<div class="grid grid-cols-1 md:grid-cols-2 gap-4">`;
+/* ================= CAROUSEL ================= */
+function renderCarousel(media) {
+    let items = media.map((item, index) => {
+        let preview = '';
 
-    media.forEach((item, i) => {
-        html += `
-        <div class="bg-gray-50 p-4 rounded-xl shadow flex flex-col gap-3">
-            ${item.type === 'video'
-                ? `<video controls class="rounded-lg"><source src="${item.url}"></video>`
-                : `<img src="${item.url}" class="rounded-lg">`
-            }
+        if (item.type === 'video') {
+            preview = `
+                <video controls class="rounded-lg w-full">
+                    <source src="${item.url}" type="video/mp4">
+                </video>`;
+        } else {
+            preview = `
+                <img src="${item.url}" class="rounded-lg w-full" />`;
+        }
 
-            <a href="download.php?action=download&url=${encodeURIComponent(item.url)}"
-               class="bg-green-600 text-white px-4 py-2 rounded-lg text-center hover:bg-green-500">
-               Download ${item.type} ${i + 1}
-            </a>
-        </div>`;
-    });
+        return `
+            <div class="border rounded-lg p-4 flex flex-col gap-3">
+                <div class="text-sm text-gray-500 font-medium">
+                    Slide ${index + 1} (${item.type})
+                </div>
 
-    html += `</div>`;
-    result.innerHTML = html;
+                ${preview}
+
+                <a href="download.php?action=download&url=${encodeURIComponent(item.url)}"
+                   class="bg-green-600 text-white text-center py-2 rounded hover:bg-green-500 transition">
+                   Download
+                </a>
+            </div>
+        `;
+    }).join('');
+
+    result.innerHTML = `
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            ${items}
+        </div>
+    `;
 }
 </script>
+
 
 </body>
 </html>
