@@ -38,7 +38,13 @@ if (empty($input['url'])) {
     exit;
 }
 
-$apiUrl = 'http://localhost:9000';
+// Load config if available
+if (file_exists(__DIR__ . '/config.php')) {
+    require_once __DIR__ . '/config.php';
+    $apiUrl = defined('COBALT_API_URL') ? COBALT_API_URL : 'http://localhost:9000';
+} else {
+    $apiUrl = 'http://localhost:9000';
+}
 
 $ch = curl_init($apiUrl);
 curl_setopt_array($ch, [
