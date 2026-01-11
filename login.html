@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySeoFan - Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .sidebar-active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+<!-- Login Page -->
+<div id="loginPage" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 via-pink-500 to-purple-700">
+    <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Admin Panel</h1>
+            <p class="text-gray-600">MySeoFan Management System</p>
+        </div>
+        
+        <form id="loginForm">
+            <div class="mb-4">
+                <label class="block text-gray-700 font-semibold mb-2">Username</label>
+                <input type="text" id="username" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 outline-none" placeholder="Enter username" required>
+            </div>
+            
+            <div class="mb-6">
+                <label class="block text-gray-700 font-semibold mb-2">Password</label>
+                <input type="password" id="password" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-500 outline-none" placeholder="Enter password" required>
+            </div>
+            
+            <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white py-3 rounded-lg font-bold hover:shadow-lg transition">
+                Login
+            </button>
+            
+            <p class="text-sm text-gray-500 mt-4 text-center">Default: admin / admin123</p>
+        </form>
+    </div>
+</div>
+
+<!-- Admin Dashboard -->
+<div id="adminDashboard" class="hidden">
+    <!-- Header -->
+    <header class="bg-white shadow-md">
+        <div class="flex items-center justify-between px-6 py-4">
+            <h1 class="text-2xl font-bold text-gray-800">MySeoFan Admin</h1>
+            <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
+                Logout
+            </button>
+        </div>
+    </header>
+
+    <div class="flex">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white h-screen shadow-lg overflow-y-auto">
+        <nav class="p-4 space-y-1">
+
+            <!-- Dashboard -->
+            <a href="#" class="sidebar-link sidebar-active block px-4 py-3 rounded-lg" data-section="dashboard">
+                <div class="flex items-center gap-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M3.75 3v18h16.5M8.25 15.75v-6m4.5 6V6.75m4.5 9v-3"/>
+                    </svg>
+                    <span>Dashboard</span>
+                </div>
+            </a>
+
+            <!-- Website Settings -->
+            <a href="#" class="sidebar-link block px-4 py-3 rounded-lg hover:bg-gray-100" data-section="settings">
+                <div class="flex items-center gap-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.094
+                                 c.55 0 1.02.398 1.11.94l.149.894
+                                 a1.125 1.125 0 001.068.916h.942
+                                 c.62 0 1.07.606.868 1.19l-.31.91
+                                 a1.125 1.125 0 00.326 1.207l.687.56
+                                 c.459.375.459 1.082 0 1.457l-.687.56
+                                 a1.125 1.125 0 00-.326 1.207l.31.91
+                                 c.203.584-.248 1.19-.868 1.19h-.942
+                                 a1.125 1.125 0 00-1.068.916l-.149.894
+                                 c-.09.542-.56.94-1.11.94h-1.094
+                                 c-.55 0-1.02-.398-1.11-.94l-.149-.894
+                                 a1.125 1.125 0 00-1.068-.916h-.942
+                                 c-.62 0-1.07-.606-.868-1.19l.31-.91
+                                 a1.125 1.125 0 00-.326-1.207l-.687-.56
+                                 c-.459-.375-.459-1.082 0-1.457l.687-.56
+                                 a1.125 1.125 0 00.326-1.207l-.31-.91
+                                 c-.203-.584.248-1.19.868-1.19h.942
+                                 a1.125 1.125 0 001.068-.916l.149-.894z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    <span>Website Settings</span>
+                </div>
+            </a>
+
+            <!-- SEO -->
+            <a href="#" class="sidebar-link block px-4 py-3 rounded-lg hover:bg-gray-100" data-section="seo">
+                <div class="flex items-center gap-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M21 21l-4.35-4.35m1.85-4.4
+                                 a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z"/>
+                    </svg>
+                    <span>SEO Settings</span>
+                </div>
+            </a>
+
+            <!-- Pages -->
+            <a href="#" class="sidebar-link block px-4 py-3 rounded-lg hover:bg-gray-100" data-section="pages">
+                <div class="flex items-center gap-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M19.5 6h-15A1.5 1.5 0 003 7.5v9
+                                 A1.5 1.5 0 004.5 18h15
+                                 A1.5 1.5 0 0021 16.5v-9
+                                 A1.5 1.5 0 0019.5 6z"/>
+                    </svg>
+                    <span>Page Management</span>
+                </div>
+            </a>
+
+            <!-- Blog -->
+            <a href="#" class="sidebar-link block px-4 py-3 rounded-lg hover:bg-gray-100" data-section="blog">
+                <div class="flex items-center gap-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M8.25 6.75h7.5M8.25 10.5h7.5
+                                 M8.25 14.25h4.5M6 3.75h12
+                                 A1.5 1.5 0 0119.5 5.25v13.5
+                                 A1.5 1.5 0 0118 20.25H6
+                                 A1.5 1.5 0 014.5 18.75V5.25
+                                 A1.5 1.5 0 016 3.75z"/>
+                    </svg>
+                    <span>Blog Posts</span>
+                </div>
+            </a>
+
+            <!-- Redirects -->
+            <a href="#" class="sidebar-link block px-4 py-3 rounded-lg hover:bg-gray-100" data-section="redirects">
+                <div class="flex items-center gap-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M16.5 9.75l3 3m0 0l-3 3m3-3H3"/>
+                    </svg>
+                    <span>Redirects</span>
+                </div>
+            </a>
+
+            <!-- Languages -->
+            <a href="#" class="sidebar-link block px-4 py-3 rounded-lg hover:bg-gray-100" data-section="languages">
+                <div class="flex items-center gap-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M12 3.75c4.556 0 8.25 3.694 8.25 8.25
+                                 S16.556 20.25 12 20.25
+                                 3.75 16.556 3.75 12
+                                 7.444 3.75 12 3.75z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M3.75 12h16.5"/>
+                    </svg>
+                    <span>Languages</span>
+                </div>
+            </a>
+
+        </nav>
+    </aside>
+
+
+        <!-- Main Content -->
+        <main class="flex-1 p-8 overflow-y-auto h-screen">
+            
+            <!-- Dashboard Section -->
+            <section id="section-dashboard" class="content-section">
+                <h2 class="text-3xl font-bold mb-6">Dashboard</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Total Pages</p>
+                                <h3 class="text-3xl font-bold text-gray-800">7</h3>
+                            </div>
+                            <div class="text-4xl">📄</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Blog Posts</p>
+                                <h3 class="text-3xl font-bold text-gray-800">0</h3>
+                            </div>
+                            <div class="text-4xl">📝</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Languages</p>
+                                <h3 class="text-3xl font-bold text-gray-800">7</h3>
+                            </div>
+                            <div class="text-4xl">🌐</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Redirects</p>
+                                <h3 class="text-3xl font-bold text-gray-800">0</h3>
+                            </div>
+                            <div class="text-4xl">🔗</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-xl font-bold mb-4">Quick Actions</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <button onclick="showSection('settings')" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg">
+                            Website Settings
+                        </button>
+                        <button onclick="showSection('seo')" class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg">
+                            SEO Settings
+                        </button>
+                        <button onclick="showSection('pages')" class="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg">
+                            Manage Pages
+                        </button>
+                        <button onclick="showSection('blog')" class="bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg">
+                            Add Blog Post
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Website Settings Section -->
+            <section id="section-settings" class="content-section hidden">
+                <h2 class="text-3xl font-bold mb-6">Website Settings</h2>
+                
+                <div class="bg-white p-6 rounded-xl shadow-md mb-6">
+                    <h3 class="text-xl font-bold mb-4">Branding</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Website Name</label>
+                            <input type="text" id="siteName" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" placeholder="MySeoFan">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Website Tagline</label>
+                            <input type="text" id="siteTagline" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" placeholder="Download Instagram Content">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-md mb-6">
+                    <h3 class="text-xl font-bold mb-4">Logo & Favicon</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Logo Upload</label>
+                            <input type="file" id="logoUpload" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" accept="image/*">
+                            <p class="text-sm text-gray-500 mt-2">Recommended: 200x50px PNG</p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">Favicon Upload</label>
+                            <input type="file" id="faviconUpload" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" accept="image/*">
+                            <p class="text-sm text-gray-500 mt-2">Recommended: 32x32px ICO/PNG</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-md mb-6">
+                    <h3 class="text-xl font-bold mb-4">Header Settings</h3>
+                    <label class="block text-gray-700 font-semibold mb-2">Custom Header Code (HTML/CSS/JS)</label>
+                    <textarea id="headerCode" rows="5" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg font-mono text-sm" placeholder="<!-- Add custom code here -->"></textarea>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-md mb-6">
+                    <h3 class="text-xl font-bold mb-4">Footer Settings</h3>
+                    <label class="block text-gray-700 font-semibold mb-2">Custom Footer Code (HTML/CSS/JS)</label>
+                    <textarea id="footerCode" rows="5" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg font-mono text-sm" placeholder="<!-- Add custom code here -->"></textarea>
+                </div>
+
+                <button onclick="saveSettings()" class="bg-gradient-to-r from-purple-600 to-pink-500 text-white px-8 py-3 rounded-lg font-bold hover:shadow-lg">
+                    Save Settings
+                </button>
+            </section>
+
+            <!-- SEO Settings Section -->
+            <section id="section-seo" class="content-section hidden">
+                <h2 class="text-3xl font-bold mb-6">SEO Settings</h2>
+                
+                <div class="bg-white p-6 rounded-xl shadow-md mb-6">
+                    <h3 class="text-xl font-bold mb-4">Homepage SEO</h3>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-semibold mb-2">Meta Title</label>
+                        <input type="text" id="homeMetaTitle" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" placeholder="MySeoFan - Download Instagram Content">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-semibold mb-2">Meta Description</label>
+                        <textarea id="homeMetaDesc" rows="3" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" placeholder="Download Instagram videos, photos, reels & IGTV instantly..."></textarea>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-semibold mb-2">Meta Keywords</label>
+                        <input type="text" id="homeMetaKeywords" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" placeholder="instagram downloader, download ig video, instagram saver">
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-md mb-6">
+                    <h3 class="text-xl font-bold mb-4">Open Graph Tags (OG Tags)</h3>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-semibold mb-2">OG Title</label>
+                        <input type="text" id="ogTitle" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" placeholder="MySeoFan - Instagram Downloader">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-semibold mb-2">OG Description</label>
+                        <textarea id="ogDesc" rows="2" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg"></textarea>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-semibold mb-2">OG Image URL</label>
+                        <input type="text" id="ogImage" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" placeholder="https://myseofan.com/og-image.jpg">
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-md mb-6">
+                    <h3 class="text-xl font-bold mb-4">Schema Markup</h3>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-semibold mb-2">Organization Name</label>
+                        <input type="text" id="schemaOrgName" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg" placeholder="MySeoFan">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-semibold mb-2">Website Type</label>
+                        <select id="schemaType" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg">
+                            <option value="WebApplication">Web Application</option>
+                            <option value="WebSite">Website</option>
+                            <option value="SoftwareApplication">Software Application</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button onclick="saveSEO()" class="bg-gradient-to-r from-blue-600 to-cyan-500 text-white px-8 py-3 rounded-lg font-bold hover:shadow-lg">
+                    Save SEO Settings
+                </button>
+            </section>
+
+            <!-- Page Management Section -->
+            <section id="section-pages" class="content-section hidden">
+                <h2 class="text-3xl font-bold mb-6">Page Management</h2>
+                
+                <div class="bg-white p-6 rounded-xl shadow-md mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-bold">Default Pages (7)</h3>
+                        <button onclick="createNewPage()" class="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-6 py-2 rounded-lg font-semibold">
+                            + Create New Page
+                        </button>
+                    </div>
+                    
+                    <div class="space-y-4" id="pagesList">
+                        <div class="border-2 border-gray-200 rounded-lg p-4 hover:border-purple-500 cursor-pointer" onclick="editPage('video')">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-bold text-lg">🎥 Video Download Page</h4>
+                                    <p class="text-sm text-gray-500">/video-download</p>
+                                </div>
+                                <button class="text-purple-600 font-semibold">Edit →</button>
+                            </div>
+                        </div>
+                        
+                        <div class="border-2 border-gray-200 rounded-lg p-4 hover:border-purple-500 cursor-pointer" onclick="editPage('photo')">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-bold text-lg">📷 Photo Download Page</h4>
+                                    <p class="text-sm text-gray-500">/photo-download</p>
+                                </div>
+                                <button class="text-purple-600 font-semibold">Edit →</button>
+                            </div>
+                        </div>
+                        
+                        <div class="border-2 border-gray-200 rounded-lg p-4 hover:border-purple-500 cursor-pointer" onclick="editPage('reels')">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-bold text-lg">🎬 Reels Download Page</h4>
+                                    <p class="text-sm text-gray-500">/reels-download</p>
+                                </div>
+                                <button class="text-purple-600 font-semibold">Edit →</button>
+                            </div>
+                        </div>
+                        
+                        <div class="border-2 border-gray-200 rounded-lg p-4 hover:border-purple-500 cursor-pointer" onclick="editPage('story')">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-bold text-lg">📱 Story Download Page</h4>
+                                    <p class="text-sm text-gray-500">/story-download</p>
+                                </div>
+                                <button class="text-purple-600 font-semibold">Edit →</button>
+                            </div>
+                        </div>
+                        
+                        <div class="border-2 border-gray-200 rounded-lg p-4 hover:border-purple-500 cursor-pointer" onclick="editPage('igtv')">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-bold text-lg">📺 IGTV Download Page</h4>
+                                    <p class="text-sm text-gray-500">/igtv-download</p>
+                                </div>
+                                <button class="text-purple-600 font-semibold">Edit →</button>
+                            </div>
+                        </div>
+                        
+                        <div class="border-2 border-gray-200 rounded-lg p-4 hover:border-purple-500 cursor-pointer" onclick="editPage('carousel')">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-bold text-lg">🎠 Carousel Download Page</h4>
+                                    <p class="text-sm text-gray-500">/carousel-download</p>
+                                </div>
+                                <button class="text-purple-600 font-semibold">Edit →</button>
+                            </div>
+                        </div>
+                        
+                        <div class="border-2 border-gray-200 rounded-lg p-4 hover:border-purple-500 cursor-pointer" onclick="editPage('privacy')">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-bold text-lg">🔒 Privacy Policy</h4>
+                                    <p class="text-sm text-gray-500">/privacy-policy</p>
+                                </div>
+                                <button class="text-purple-600 font-semibold">Edit →</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Blog Section -->
+            <section id="section-blog" class="content-section hidden">
+                <h2 class="text-3xl font-bold mb-6">Blog Posts</h2>
+                
+                <div class="bg-white p-6 rounded-xl shadow-md mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-bold">All Posts</h3>
+                        <button onclick="createBlogPost()" class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-2 rounded-lg font-semibold">
+                            + New Post
+                        </button>
+                    </div>
+                    
+                    <div id="blogPostsList" class="text-center text-gray-500 py-8">
+                        No blog posts yet. Create your first post!
+                    </div>
+                </div>
+            </section>
+
+            <!-- Redirects Section -->
+            <section id="section-redirects" class="content-section hidden">
+                <h2 class="text-3xl font-bold mb-6">Redirect Management</h2>
+                
+                <div class="bg-white p-6 rounded-xl shadow-md mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-bold">Active Redirects</h3>
+                        <button onclick="addRedirect()" class="bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-2 rounded-lg font-semibold">
+                            + Add Redirect
+                        </button>
+                    </div>
+                    
+                    <div id="redirectsList">
+                        <div class="border-2 border-gray-200 rounded-lg p-4 mb-4">
+                            <div class="grid grid-cols-3 gap-4 items-center">
+                                <div>
+                                    <p class="text-sm text-gray-500">From:</p>
+                                    <p class="font-semibold">/</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">To:</p>
+                                    <p class="font-semibold">/en</p>
+                                </div>
+                                <div class="text-right">
+                                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">301</span>
+                                    <button class="ml-2 text-red-500 hover:text-red-700">🗑️</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Languages Section -->
+            <section id="section-languages" class="content-section hidden">
+                <h2 class="text-3xl font-bold mb-6">Language Management</h2>
+                
+                <div class="bg-white p-6 rounded-xl shadow-md mb-6">
+                    <h3 class="text-xl font-bold mb-4">Supported Languages (7)</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="border-2 border-purple-500 rounded-lg p-4 bg-purple-50">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-bold">🇺🇸 English (EN)</h4>
+                                    <p class="text-sm text-gray-500">Default Language</p>
+                                </div>
+                                <button class="text-purple-600 font-semibold">Edit</button>
+                            </div>
+                        </div>
+                        
+                        <div class="border-2 border-gray-200 rounded-lg p-4 hover:border-purple-500">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-bold">🇮🇩 Indonesian (ID)</h4>
+                                    <p class="text-sm text-gray-500">Bahasa Indonesia</p>
+                                </div>
+                                <button class="text-purple-600 font-semibold">Edit</button>
+                            </div>
+                        </div>
+                        
+                        <div class="border-2 border-gray-200 rounded-lg p-4 hover:border-purple-500">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-bold">🇪🇸 Spanish (ES)</h4>
+                                    <p class="text-sm text-gray-500">Español</p>
+                                </div>
+                                <button class="text-purple-600 font-semibold">Edit</button>
+                            </div>
+                        </div>
+                        
+                        <div class="border-2 border-gray-200 rounded-lg p-4 hover:border-purple-500">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-bold">🇫🇷 French (FR)</h4>
+                                    <p class="text-sm text-gray-500">Français</p>
+                                </div>
+                                <button class="text-purple-600 font-semibold">Edit</button>
+                            </div>
+                        </div>
+                        
+                        <div class="border-2 border-gray-200 rounded-lg p-4 hover:border-purple-500">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-bold">🇩🇪 German (DE)</h4>
+                                    <p class="text-sm text-gray-500">Deutsch</p>
+                                </div>
+                                <button class="text-purple-600 font-semibold">Edit</button>
+                            </div>
+                        </div>
+                        
+                        <div class="border-2 border-gray-200 rounded-lg p-4 hover:border-purple-500">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-bold">🇵🇹 Portuguese (PT)</h4>
+                                    <p class="text-sm text-gray-500">Português</p>
+                                </div>
+                                <button class="text-purple-600 font-semibold">Edit</button>
+                            </div>
+                        </div>
+                        
+                        <div class="border-2 border-gray-200 rounded-lg p-4 hover:border-purple-500">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-bold">🇯🇵 Japanese (JA)</h4>
+                                    <p class="text-sm text-gray-500">日本語</p>
+                                </div>
+                                <button class="text-purple-600 font-semibold">Edit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
+                    <p class="text-blue-800">
+                        <strong>💡 Tip:</strong> When users select a language, all content including meta tags, page titles, and descriptions will automatically change to the selected language.
+                    </p>
+                </div>
+            </section>
+
+        </main>
+    </div>
+</div>
+
+<script>
+// Check if logged in
+const isLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
+if (isLoggedIn) {
+    document.getElementById('loginPage').classList.add('hidden');
+    document.getElementById('adminDashboard').classList.remove('hidden');
+}
+
+// Login function
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    
+    if (username === 'admin' && password === 'admin123') {
+        localStorage.setItem('adminLoggedIn', 'true');
+        document.getElementById('loginPage').classList.add('hidden');
+        document.getElementById('adminDashboard').classList.remove('hidden');
+    } else {
+        alert('Invalid credentials! Use: admin / admin123');
+    }
+});
+
+// Logout function
+function logout() {
+    if (confirm('Are you sure you want to logout?')) {
+        localStorage.removeItem('adminLoggedIn');
+        location.reload();
+    }
+}
+
+// Sidebar navigation
+document.querySelectorAll('.sidebar-link').forEach(link => {
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const section = this.dataset.section;
+        showSection(section);
+    });
+});
+
+function showSection(section) {
+    // Hide all sections
+    document.querySelectorAll('.content-section').forEach(s => s.classList.add('hidden'));
+    // Show selected section
+    document.getElementById('section-' + section).classList.remove('hidden');
+    
+    // Update sidebar active state
+    document.querySelectorAll('.sidebar-link').forEach(link => {
+        link.classList.remove('sidebar-active');
+        if (link.dataset.section === section) {
+            link.classList.add('sidebar-active');
+        }
+    });
+}
+
+// Show Toast Notification
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = `fixed top-4 right-4 px-6 py-4 rounded-lg shadow-2xl z-50 transform transition-all duration-300 ${
+        type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+    }`;
+    toast.innerHTML = `
+        <div class="flex items-center gap-3">
+            <span>${message}</span>
+            <button onclick="this.parentElement.parentElement.remove()" class="ml-4 font-bold">×</button>
+        </div>
+    `;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100px)';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+// Save Settings
+function saveSettings() {
+    const settings = {
+        siteName: document.getElementById('siteName').value,
+        siteTagline: document.getElementById('siteTagline').value,
+        headerCode: document.getElementById('headerCode').value,
+        footerCode: document.getElementById('footerCode').value
+    };
+    
+    localStorage.setItem('websiteSettings', JSON.stringify(settings));
+    showToast('✅ Website settings saved successfully!', 'success');
+    
+    // Update dashboard stats if needed
+    updateDashboard();
+}
+
+// Save SEO
+function saveSEO() {
+    const seo = {
+        homeMetaTitle: document.getElementById('homeMetaTitle').value,
+        homeMetaDesc: document.getElementById('homeMetaDesc').value,
+        homeMetaKeywords: document.getElementById('homeMetaKeywords').value,
+        ogTitle: document.getElementById('ogTitle').value,
+        ogDesc: document.getElementById('ogDesc').value,
+        ogImage: document.getElementById('ogImage').value,
+        schemaOrgName: document.getElementById('schemaOrgName').value,
+        schemaType: document.getElementById('schemaType').value
+    };
+    
+    localStorage.setItem('seoSettings', JSON.stringify(seo));
+    showToast('✅ SEO settings saved successfully!', 'success');
+}
+
+// Update Dashboard Stats
+function updateDashboard() {
+    // Update stats from localStorage
+    const settings = JSON.parse(localStorage.getItem('websiteSettings') || '{}');
+    const seo = JSON.parse(localStorage.getItem('seoSettings') || '{}');
+    const pages = JSON.parse(localStorage.getItem('customPages') || '[]');
+    const blogPosts = JSON.parse(localStorage.getItem('blogPosts') || '[]');
+    const redirects = JSON.parse(localStorage.getItem('redirects') || '[]');
+    
+    // Update page count (7 default + custom pages)
+    const totalPages = 7 + pages.length;
+    const pagesEl = document.querySelector('#section-dashboard .text-3xl');
+    if (pagesEl && pagesEl.textContent.trim() === '7') {
+        // Update will happen on page load
+    }
+}
+
+// Edit Page
+function editPage(pageType) {
+    const pages = JSON.parse(localStorage.getItem('pages') || '{}');
+    const pageData = pages[pageType] || { title: pageType, content: '' };
+    
+    const content = prompt(`Edit content for ${pageType} page:`, pageData.content || '');
+    if (content !== null) {
+        if (!pages[pageType]) pages[pageType] = {};
+        pages[pageType].content = content;
+        pages[pageType].lastModified = new Date().toISOString();
+        localStorage.setItem('pages', JSON.stringify(pages));
+        showToast(`✅ ${pageType} page updated successfully!`, 'success');
+    }
+}
+
+// Create New Page
+function createNewPage() {
+    const pageName = prompt('Enter page name (URL friendly, e.g., about-us):');
+    if (pageName && pageName.trim()) {
+        const pageTitle = prompt('Enter page title:', pageName);
+        const pages = JSON.parse(localStorage.getItem('customPages') || '[]');
+        
+        pages.push({
+            name: pageName.trim(),
+            title: pageTitle || pageName,
+            content: '',
+            createdAt: new Date().toISOString()
+        });
+        
+        localStorage.setItem('customPages', JSON.stringify(pages));
+        showToast(`✅ Page "${pageName}" created successfully!`, 'success');
+        
+        // Refresh page list if on pages section
+        if (!document.getElementById('section-pages').classList.contains('hidden')) {
+            location.reload();
+        }
+    }
+}
+
+// Create Blog Post
+function createBlogPost() {
+    const title = prompt('Enter blog post title:');
+    if (title && title.trim()) {
+        const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        const posts = JSON.parse(localStorage.getItem('blogPosts') || '[]');
+        
+        posts.push({
+            id: Date.now(),
+            title: title.trim(),
+            slug: slug,
+            content: '',
+            excerpt: '',
+            published: false,
+            createdAt: new Date().toISOString()
+        });
+        
+        localStorage.setItem('blogPosts', JSON.stringify(posts));
+        showToast(`✅ Blog post "${title}" created!`, 'success');
+        
+        // Refresh blog list if on blog section
+        if (!document.getElementById('section-blog').classList.contains('hidden')) {
+            location.reload();
+        }
+    }
+}
+
+// Add Redirect
+function addRedirect() {
+    const fromUrl = prompt('From URL (e.g., /old-page):');
+    if (fromUrl && fromUrl.trim()) {
+        const toUrl = prompt('To URL (e.g., /new-page):');
+        if (toUrl && toUrl.trim()) {
+            const redirects = JSON.parse(localStorage.getItem('redirects') || '[]');
+            
+            redirects.push({
+                from: fromUrl.trim(),
+                to: toUrl.trim(),
+                type: '301',
+                createdAt: new Date().toISOString()
+            });
+            
+            localStorage.setItem('redirects', JSON.stringify(redirects));
+            showToast(`✅ Redirect added: ${fromUrl} → ${toUrl}`, 'success');
+            
+            // Refresh redirects list if on redirects section
+            if (!document.getElementById('section-redirects').classList.contains('hidden')) {
+                location.reload();
+            }
+        }
+    }
+}
+
+// Load saved settings on page load
+window.addEventListener('load', function() {
+    // Load Website Settings
+    const savedSettings = localStorage.getItem('websiteSettings');
+    if (savedSettings) {
+        const settings = JSON.parse(savedSettings);
+        if (document.getElementById('siteName')) {
+            document.getElementById('siteName').value = settings.siteName || '';
+            document.getElementById('siteTagline').value = settings.siteTagline || '';
+            document.getElementById('headerCode').value = settings.headerCode || '';
+            document.getElementById('footerCode').value = settings.footerCode || '';
+        }
+    }
+    
+    // Load SEO Settings
+    const savedSEO = localStorage.getItem('seoSettings');
+    if (savedSEO) {
+        const seo = JSON.parse(savedSEO);
+        if (document.getElementById('homeMetaTitle')) {
+            document.getElementById('homeMetaTitle').value = seo.homeMetaTitle || '';
+            document.getElementById('homeMetaDesc').value = seo.homeMetaDesc || '';
+            document.getElementById('homeMetaKeywords').value = seo.homeMetaKeywords || '';
+            document.getElementById('ogTitle').value = seo.ogTitle || '';
+            document.getElementById('ogDesc').value = seo.ogDesc || '';
+            document.getElementById('ogImage').value = seo.ogImage || '';
+            document.getElementById('schemaOrgName').value = seo.schemaOrgName || '';
+            document.getElementById('schemaType').value = seo.schemaType || '';
+        }
+    }
+    
+    // Load and display blog posts
+    const blogPosts = JSON.parse(localStorage.getItem('blogPosts') || '[]');
+    const blogListEl = document.getElementById('blogPostsList');
+    if (blogListEl && blogPosts.length > 0) {
+        blogListEl.innerHTML = blogPosts.map(post => `
+            <div class="border-2 border-gray-200 rounded-lg p-4 mb-4 hover:border-purple-500">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h4 class="font-bold text-lg">${post.title}</h4>
+                        <p class="text-sm text-gray-500">${post.slug} • ${new Date(post.createdAt).toLocaleDateString()}</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold ${post.published ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}">
+                            ${post.published ? 'Published' : 'Draft'}
+                        </span>
+                        <button class="text-purple-600 font-semibold">Edit</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    // Load and display redirects
+    const redirects = JSON.parse(localStorage.getItem('redirects') || '[]');
+    const redirectsListEl = document.getElementById('redirectsList');
+    if (redirectsListEl && redirects.length > 0) {
+        const defaultRedirect = redirectsListEl.innerHTML; // Keep default redirect
+        redirectsListEl.innerHTML = defaultRedirect + redirects.map(redirect => `
+            <div class="border-2 border-gray-200 rounded-lg p-4 mb-4">
+                <div class="grid grid-cols-3 gap-4 items-center">
+                    <div>
+                        <p class="text-sm text-gray-500">From:</p>
+                        <p class="font-semibold">${redirect.from}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">To:</p>
+                        <p class="font-semibold">${redirect.to}</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">${redirect.type}</span>
+                        <button onclick="removeRedirect('${redirect.from}')" class="ml-2 text-red-500 hover:text-red-700">🗑️</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    // Update dashboard stats
+    updateDashboard();
+});
+
+// Remove Redirect
+function removeRedirect(fromUrl) {
+    if (confirm(`Remove redirect from "${fromUrl}"?`)) {
+        const redirects = JSON.parse(localStorage.getItem('redirects') || '[]');
+        const filtered = redirects.filter(r => r.from !== fromUrl);
+        localStorage.setItem('redirects', JSON.stringify(filtered));
+        showToast('✅ Redirect removed successfully!', 'success');
+        location.reload();
+    }
+}
+</script>
+
+</body>
+</html>
