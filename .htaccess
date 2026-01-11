@@ -4,7 +4,7 @@
 # Enable Rewrite Engine
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /
+    RewriteBase /instagram-downloader/
     
     # Redirect to index.php if file doesn't exist
     RewriteCond %{REQUEST_FILENAME} !-f

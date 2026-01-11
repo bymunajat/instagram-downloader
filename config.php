@@ -24,6 +24,7 @@ define('STORAGE_SEO', STORAGE_PATH . 'seo.json');
 define('STORAGE_PAGES', STORAGE_PATH . 'pages.json');
 define('STORAGE_BLOG', STORAGE_PATH . 'blog.json');
 define('STORAGE_REDIRECTS', STORAGE_PATH . 'redirects.json');
+define('STORAGE_LANGUAGES', STORAGE_PATH . 'languages.json');
 
 // Session Settings
 define('SESSION_NAME', 'igdownloader_session');
@@ -34,7 +35,7 @@ define('CSRF_TOKEN_NAME', 'csrf_token');
 
 // Language Settings
 define('DEFAULT_LANGUAGE', 'en');
-define('SUPPORTED_LANGUAGES', ['en', 'id']);
+define('SUPPORTED_LANGUAGES', ['en', 'id', 'es', 'fr', 'de', 'pt', 'ja']);
 
 // Error Reporting (disable in production)
 error_reporting(E_ALL);
